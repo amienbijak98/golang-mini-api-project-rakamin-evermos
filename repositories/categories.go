@@ -28,25 +28,40 @@ func GetAllCategories(db *gorm.DB) ([]models.Category, error) {
 
 func GetCategoryByID(db *gorm.DB, id int) (models.Category, error) {
 	var category models.Category
-	db.First(&category, id)
+	result := db.First(&category, id)
+	if result.Error != nil {
+		return models.Category{}, result.Error
+	}
 	return category, nil
 }
 
 func UpdateCategory(db *gorm.DB, id int, category models.Category) (models.Category, error) {
 	var existingCategory models.Category
-	db.First(&existingCategory, id)
+	result := db.First(&existingCategory, id)
+	if result.Error != nil {
+		return models.Category{}, result.Error
+	}
 
 	existingCategory.CategoryName = category.CategoryName
 	existingCategory.UpdatedAt = time.Now()
 
-	db.Save(&existingCategory)
+	result = db.Save(&existingCategory)
+	if result.Error != nil {
+		return models.Category{}, result.Error
+	}
 	return existingCategory, nil
 }
 
 func DeleteCategory(db *gorm.DB, id int) error {
 	var category models.Category
-	db.First(&category, id)
+	result := db.First(&category, id)
+	if result.Error != nil {
+		return result.Error
+	}
 
-	db.Delete(&category)
+	result = db.Delete(&category)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }

@@ -39,7 +39,7 @@ type Store struct {
 	ID                int       `gorm:"primary_key;auto_increment" json:"id"`
 	UserID            int       `gorm:"unique" json:"user_id"`
 	StoreName         string    `json:"store_name"`
-	UrlFoto           string    `json:"url_foto"`
+	PhotoUrl          string    `json:"photo_url"`
 	UpdatedAt         time.Time `json:"updated_at"`
 	CreatedAt         time.Time `json:"created_at"`
 	Product           []Product

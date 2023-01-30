@@ -14,29 +14,49 @@ func CreateCategory(c *fiber.Ctx) error {
 
 	err := c.BodyParser(&category)
 	if err != nil {
-		return c.SendStatus(400)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  false,
+			"message": "Failed to POST new category",
+			"errors":  err.Error(),
+			"data":    nil,
+		})
 	}
 
 	err = repositories.CreateCategory(database.DbConnection, *category)
 	if err != nil {
-		return c.SendStatus(400)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  false,
+			"message": "Failed to POST new category",
+			"errors":  err.Error(),
+			"data":    nil,
+		})
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "Success insert category",
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":  true,
+		"message": "Success to POST new category",
+		"errors":  err,
+		"data":    1,
 	})
 }
 
 func GetAllCategories(c *fiber.Ctx) error {
-
 	categories, err := repositories.GetAllCategories(database.DbConnection)
 
-	//jsonCategories, err := json.Marshal(categories)
-
 	if err != nil {
-		return c.SendStatus(400)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  false,
+			"message": "Failed to GET category",
+			"errors":  err.Error(),
+			"data":    categories,
+		})
 	} else {
-		return c.JSON(categories)
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"data":    categories,
+			"status":  true,
+			"message": "Success to GET category",
+			"errors":  err,
+		})
 	}
 }
 
@@ -46,9 +66,19 @@ func GetCategoryByID(c *fiber.Ctx) error {
 	category, err := repositories.GetCategoryByID(database.DbConnection, idCategory)
 
 	if err != nil {
-		return c.SendStatus(400)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  false,
+			"message": "Failed to GET category",
+			"errors":  err.Error(),
+			"data":    nil,
+		})
 	} else {
-		return c.JSON(category)
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"data":    category,
+			"status":  true,
+			"message": "Success to GET category",
+			"errors":  err,
+		})
 	}
 }
 
@@ -58,15 +88,30 @@ func UpdateCategory(c *fiber.Ctx) error {
 
 	err := c.BodyParser(&category)
 	if err != nil {
-		return c.SendStatus(400)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  false,
+			"message": "Failed to UPDATE category",
+			"errors":  err.Error(),
+			"data":    nil,
+		})
 	}
 
 	*category, err = repositories.UpdateCategory(database.DbConnection, idCategory, *category)
 	if err != nil {
-		return c.SendStatus(400)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  false,
+			"message": "Failed to UPDATE category",
+			"errors":  err.Error(),
+			"data":    nil,
+		})
 	}
 
-	return c.JSON(category)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"data":    *category,
+		"status":  true,
+		"message": "Success to UPDATE category",
+		"errors":  err,
+	})
 }
 
 func DeleteCategory(c *fiber.Ctx) error {
@@ -75,10 +120,18 @@ func DeleteCategory(c *fiber.Ctx) error {
 	err := repositories.DeleteCategory(database.DbConnection, idCategory)
 
 	if err != nil {
-		return c.SendStatus(400)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  false,
+			"message": "Failed to DELETE category",
+			"errors":  err.Error(),
+			"data":    nil,
+		})
 	} else {
-		return c.JSON(fiber.Map{
-			"message": "1 category deleted",
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"status":  true,
+			"message": "Success to DELETE category",
+			"errors":  err,
+			"data":    1,
 		})
 	}
 }
