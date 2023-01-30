@@ -14,7 +14,7 @@ func Routing(app *fiber.App) {
 	api := app.Group("/api/v1")
 
 	//-- Reg and Login/Logout Auth
-	// api.Post("/auth/register", controllers.Register)
+	api.Post("/auth/register", controllers.Register)
 	// api.Post("/auth/login", controllers.Login)
 	// api.Post("/auth/logout", controllers.Logout)
 
@@ -27,5 +27,4 @@ func Routing(app *fiber.App) {
 	api.Get("/category/:id", controllers.GetCategoryByID)
 	api.Put("/category/:id", controllers.UpdateCategory)
 	api.Delete("/category/:id", controllers.DeleteCategory)
-
 }
